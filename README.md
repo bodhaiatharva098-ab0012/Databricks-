@@ -5,114 +5,106 @@ An end-to-end data engineering project using **Databricks, PySpark, Delta Lake, 
 
 ## Project Overview
 
-This project demonstrates how raw CSV data can be ingested, cleaned, transformed, and aggregated into business-ready datasets using Databricks.
+This project demonstrates how raw avocado sales data is ingested from a CSV file, cleaned and validated using PySpark, and transformed into business-ready summary tables for analytics and reporting.
 
-The source dataset, `avocado.csv`, is stored in a Unity Catalog Volume. PySpark processes the data, Delta tables store the results, and the Gold layer provides summarized metrics for business analysis and Power BI reporting.
+### Technologies Used
 
-## Architecture
+- **Databricks:** Cloud data processing and notebook environment
+- **PySpark:** Data ingestion, cleaning, and aggregation
+- **Unity Catalog:** Data governance and table management
+- **Delta Lake:** Reliable storage for Bronze, Silver, and Gold tables
+- **CSV:** Source dataset format
+- **Power BI:** Business intelligence and visualization
 
-**CSV → Bronze → Silver → Gold → Power BI**
+## ETL Workflow
 
-1. **Bronze Layer:** Ingest raw avocado CSV data and preserve source information.
-2. **Silver Layer:** Clean and standardize columns, convert data types, and validate records.
-3. **Gold Layer:** Aggregate sales volume, prices, and bag sales by year, avocado type, and region.
-4. **Power BI:** Use the Gold dataset to build interactive dashboards and reports.
+The pipeline follows the Medallion Architecture:
+
+**CSV File → Bronze Layer → Silver Layer → Gold Layer → Power BI**
+
+1. Extract avocado sales data from the Unity Catalog Volume.
+2. Load raw data into the Bronze Delta table.
+3. Clean and standardize data in the Silver layer.
+4. Aggregate business metrics in the Gold layer.
+5. Connect the Gold data to Power BI for reporting.
 
 ## 1. Bronze Layer – Raw Data Ingestion
 
 **Table:** `workspace.ab.bronze_avocado`
 
-The Bronze layer is the first stage of the pipeline. It reads the raw avocado CSV file from Unity Catalog and stores the ingested records in Delta format.
+The Bronze layer is the first stage of the pipeline. It reads the raw `avocado.csv` file from a Unity Catalog Volume and stores the data in Delta format.
 
 ### Key Operations
 
-- Read the CSV file using PySpark.
-- Preserve raw data values and column names.
-- Add source file and ingestion timestamp metadata.
-- Save the data as a Delta table.
-- Support data lineage and downstream processing.
+- Read CSV data using PySpark.
+- Preserve the original data structure.
+- Add source file path and ingestion timestamp metadata.
+- Store raw data in a Bronze Delta table.
+- Maintain source traceability for downstream processing.
 
-### Bronze Layer Infographic
+### Bronze Layer Architecture
 
-![Databricks Bronze Layer – Avocado CSV Ingestion](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Bronze%20Layer%20Infographic.jpg)
+![Databricks Bronze Layer - Avocado CSV Ingestion](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Bronze%20Layer%20Infographic.jpg)
 
 ## 2. Silver Layer – Data Cleaning and Validation
 
 **Table:** `workspace.ab.silver_avocado`
 
-The Silver layer prepares the avocado dataset for analysis by standardizing column names, converting data types, handling missing values, and removing invalid or duplicate records where implemented.
+The Silver layer processes raw data into a cleaner, standardized dataset suitable for analysis. It removes unnecessary columns, standardizes column names, converts data types, and applies data quality checks.
 
 ### Key Operations
 
-- Remove unnecessary index columns.
+- Remove unnecessary CSV index columns.
 - Standardize column names.
-- Trim text and handle blank values.
-- Convert dates and numeric fields to appropriate data types.
-- Validate records and remove duplicates.
-- Save cleaned data in Delta format.
+- Convert the date column to a proper date type.
+- Clean text values and handle blank values where implemented.
+- Remove invalid records and duplicates where implemented.
+- Validate numeric values before downstream analysis.
+- Save cleaned data as a Delta table.
 
-### Silver Layer Infographic
+### Silver Layer Architecture
 
-![Databricks Silver Layer – Avocado Data Processing](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Silver%20Layer%20Avocado%20Pipeline.jpg)
+![Databricks Silver Layer - Avocado Data Processing](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Silver%20Layer%20Avocado%20Pipeline.jpg)
 
 ## 3. Gold Layer – Business Aggregation and Analytics
 
 **Table:** `workspace.ab.gold_avocado`
 
-The Gold layer converts cleaned Silver data into business-level summaries. It groups avocado sales data by year, type, and region to support reporting and decision-making.
+The Gold layer transforms cleaned Silver data into aggregated business metrics. It groups avocado sales by year, avocado type, and region to support business analysis and reporting.
 
 ### Key Operations
 
-- Group data by `year`, `type`, and `region`.
+- Group data by year, type, and region.
 - Calculate total sales volume.
-- Calculate average, minimum, and maximum prices.
-- Summarize total, small, large, and extra-large bag volumes.
+- Calculate average, minimum, and maximum avocado prices.
+- Aggregate total, small, large, and extra-large bag volumes.
 - Count records for each group.
-- Round numeric values for reporting.
-- Save the aggregated output as a Delta table.
+- Round numeric values for clear reporting.
+- Save the results as a Gold Delta table.
 
-### Gold Layer Infographic
+### Gold Layer Architecture
 
-![Databricks Gold Layer – Business Aggregation and Analytics](images/gold_layer.png)
+![Databricks Gold Layer - Avocado Business Analytics](images/gold_layer.png)
 
-> Upload your Gold Layer infographic to the repository's `images` folder as `gold_layer.png` for this image to display.
+> **Note:** Upload your Gold-layer infographic to the repository's `images` folder using the filename `gold_layer.png`, or replace the image path above with its actual GitHub URL.
 
-## Source Dataset
+## Data Source
 
-**CSV file:** `avocado.csv`
+The source dataset is stored in a Databricks Unity Catalog Volume.
 
-**Unity Catalog Volume path:**
+```text
+/Volumes/workspace/ab/sql/avocado.csv
+```
 
-`/Volumes/workspace/ab/sql/avocado.csv`
-
-The dataset contains avocado pricing, sales volume, bag sales, date, year, avocado type, and region information.
+The dataset contains avocado sales information, including prices, sales volume, bag volumes, avocado type, year, and region.
 
 ## Tables Created
 
 | Layer | Table Name | Purpose |
 |---|---|---|
-| Bronze | `workspace.ab.bronze_avocado` | Raw data ingestion |
+| Bronze | `workspace.ab.bronze_avocado` | Raw ingested data |
 | Silver | `workspace.ab.silver_avocado` | Cleaned and standardized data |
 | Gold | `workspace.ab.gold_avocado` | Aggregated business metrics |
-
-## Technologies Used
-
-- **Databricks:** Data engineering and notebook execution.
-- **PySpark:** Data processing, cleaning, and aggregation.
-- **Delta Lake:** Reliable storage of processed datasets.
-- **Unity Catalog:** Data organization and access management.
-- **Power BI:** Business intelligence and visualization.
-
-## Business Insights
-
-The Gold dataset can be used to analyze:
-
-- Avocado sales volume by region.
-- Conventional versus organic avocado performance.
-- Average prices across different years.
-- Regional price variations.
-- Small, large, and extra-large bag sales.
-- Minimum and maximum avocado prices.
 
 ## Project Structure
 
@@ -121,42 +113,46 @@ Databricks-Avocado-ETL/
 │
 ├── README.md
 ├── avocado.csv
-├── images/
-│   ├── bronze_layer.png
-│   ├── silver_layer.png
-│   └── gold_layer.png
-└── notebooks/
-    ├── bronze_layer.py
-    ├── silver_layer.py
-    └── gold_layer.py
+└── images/
+    ├── bronze_layer.png
+    ├── silver_layer.png
+    └── gold_layer.png
 ```
 
-*The folder structure above is a suggested organization for the repository.*
+The CSV file can remain in the Databricks Volume instead of being uploaded to GitHub. The `images` folder is used for the individual pipeline diagrams displayed in this README.
 
-## How to Run
+## How to Run the Project
 
-1. Upload `avocado.csv` to the Unity Catalog Volume.
-2. Open your Databricks workspace.
-3. Run the Bronze ingestion notebook.
-4. Run the Silver cleaning and validation notebook.
-5. Run the Gold aggregation notebook.
-6. Verify the output tables in Unity Catalog.
-7. Connect Power BI to Databricks SQL Warehouse to create dashboards.
+1. Open your Databricks workspace.
+2. Verify that the Unity Catalog Volume contains `avocado.csv`.
+3. Run the Bronze-layer notebook to ingest raw data.
+4. Run the Silver-layer notebook to clean and validate the data.
+5. Run the Gold-layer notebook to aggregate business metrics.
+6. Verify the three Delta tables using Databricks SQL.
+7. Connect Power BI to Databricks if you want to create interactive dashboards.
 
-## Expected Outcome
+## Expected Results
 
-The pipeline transforms raw avocado sales data into structured Delta tables across three layers. The Gold layer provides business-ready summaries for reporting, visualization, and further analysis.
+- Raw avocado data stored in the Bronze layer.
+- Cleaned and standardized records in the Silver layer.
+- Aggregated sales and price metrics in the Gold layer.
+- Data prepared for business intelligence and visualization.
 
 ## Future Enhancements
 
-- Automate execution using Databricks Workflows.
-- Add data quality checks and validation reports.
-- Implement incremental data processing.
+- Automate the pipeline using Databricks Workflows.
+- Add incremental data processing.
+- Implement detailed data quality checks.
+- Create interactive Power BI dashboards.
 - Schedule regular data refreshes.
-- Build interactive Power BI dashboards.
+- Add monitoring and error handling.
 
 ## Author
 
 **Atharva Bodhai**
 
 GitHub: [bodhaiatharva098-ab0012](https://github.com/bodhaiatharva098-ab0012)
+
+## License
+
+Add an appropriate open-source license if you intend to distribute or reuse this project publicly.
