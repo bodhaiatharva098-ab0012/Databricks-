@@ -121,9 +121,9 @@ Databricks-Avocado-ETL/
 │
 ├── README.md
 └── images/
-    ├── bronze_layer.jpeg
-    ├── silver_layer.jpeg
-    └── gold_layer.jpeg
+    ├── bronze_layer.jpg
+    ├── silver_layer.jpg
+    └── gold_layer.jpg
 ```
 
 The diagrams may be stored in the repository or referenced directly through their GitHub URLs. The source CSV can remain in the Databricks Volume instead of being uploaded to GitHub.
