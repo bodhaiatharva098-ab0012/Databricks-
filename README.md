@@ -18,8 +18,6 @@ This project demonstrates how raw avocado sales data is ingested from a CSV file
 
 ## ETL Workflow
 
-The pipeline follows the Medallion Architecture:
-
 **CSV File → Bronze Layer → Silver Layer → Gold Layer → Power BI**
 
 1. Extract avocado sales data from the Unity Catalog Volume.
@@ -32,7 +30,7 @@ The pipeline follows the Medallion Architecture:
 
 **Table:** `workspace.ab.bronze_avocado`
 
-The Bronze layer is the first stage of the pipeline. It reads the raw `avocado.csv` file from a Unity Catalog Volume and stores the data in Delta format.
+The Bronze layer reads the raw `avocado.csv` file from a Unity Catalog Volume and stores the data in Delta format.
 
 ### Key Operations
 
@@ -84,9 +82,7 @@ The Gold layer transforms cleaned Silver data into aggregated business metrics. 
 
 ### Gold Layer Architecture
 
-![Databricks Gold Layer - Avocado Business Analytics](images/gold_layer.png)
-
-> **Note:** Upload your Gold-layer infographic to the repository's `images` folder using the filename `gold_layer.png`, or replace the image path above with its actual GitHub URL.
+![Databricks Gold Layer - Avocado Business Analytics](https://github.com/bodhaiatharva098-ab0012/Databricks-/blob/main/Databricks%20Gold%20Layer%20Pipeline%20Infographic.jpg?raw=true)
 
 ## Data Source
 
@@ -112,14 +108,13 @@ The dataset contains avocado sales information, including prices, sales volume, 
 Databricks-Avocado-ETL/
 │
 ├── README.md
-├── avocado.csv
 └── images/
     ├── bronze_layer.png
     ├── silver_layer.png
     └── gold_layer.png
 ```
 
-The CSV file can remain in the Databricks Volume instead of being uploaded to GitHub. The `images` folder is used for the individual pipeline diagrams displayed in this README.
+The diagrams may be stored in the repository or referenced directly through their GitHub URLs. The source CSV can remain in the Databricks Volume instead of being uploaded to GitHub.
 
 ## How to Run the Project
 
