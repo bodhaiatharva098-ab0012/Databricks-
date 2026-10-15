@@ -44,6 +44,10 @@ The Bronze layer reads the raw `avocado.csv` file from a Unity Catalog Volume an
 
 ![Databricks Bronze Layer - Avocado CSV Ingestion](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Bronze%20Layer%20Infographic.jpg)
 
+### Bronze Table Screenshot
+
+![Bronze Table](https://github.com/bodhaiatharva098-ab0012/Databricks-/blob/main/bronze%20table.jpg?raw=true)
+
 ## 2. Silver Layer – Data Cleaning and Validation
 
 **Table:** `workspace.ab.silver_avocado`
@@ -64,6 +68,10 @@ The Silver layer processes raw data into a cleaner, standardized dataset suitabl
 
 ![Databricks Silver Layer - Avocado Data Processing](https://raw.githubusercontent.com/bodhaiatharva098-ab0012/Databricks-/5828b6658be4a4d4bff50a4a8619588a85c9c8cc/Databricks%20Silver%20Layer%20Avocado%20Pipeline.jpg)
 
+### Silver Table Screenshot
+
+![Silver Table](https://github.com/bodhaiatharva098-ab0012/Databricks-/blob/main/silver.jpg?raw=true)
+
 ## 3. Gold Layer – Business Aggregation and Analytics
 
 **Table:** `workspace.ab.gold_avocado`
@@ -83,6 +91,10 @@ The Gold layer transforms cleaned Silver data into aggregated business metrics. 
 ### Gold Layer Architecture
 
 ![Databricks Gold Layer - Avocado Business Analytics](https://github.com/bodhaiatharva098-ab0012/Databricks-/blob/main/Databricks%20Gold%20Layer%20Pipeline%20Infographic.jpg?raw=true)
+
+### Gold Table Screenshot
+
+![Gold Table](https://github.com/bodhaiatharva098-ab0012/Databricks-/blob/main/gold.jpg?raw=true)
 
 ## Data Source
 
